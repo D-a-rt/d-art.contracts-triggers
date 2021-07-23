@@ -6,13 +6,14 @@ CREATE OR REPLACE FUNCTION update_token_owner()
 RETURNS TRIGGER AS $$
 
 BEGIN
-    PERFORM dblink_connect('host=d-art-db dbname=postgres user=postgres password=p@ssw0rd port=5432');
+    PERFORM dblink_connect('host=<HOST> dbname=<DB_NAME> user=<USER> password=<PASSWORD> port=<PORT>'); 
 
     IF (TG_OP = 'INSERT') THEN
         PERFORM dblink_exec(
-            'UPDATE artwork SET owner_id = (SELECT owner_id FROM users WHERE address = ' || quote_literal(NEW.assets_address_5) ||
-            ') WHERE token_info ->> ''tokenId'' = ' || quote_literal(NEW.idx_assets_nat_4) ||
-            'AND token_info ->> ''contractAddress'' = ''KT1E9sFJs99rdpDJ5qyFgHmTWp5FxCfCHnaQ'' ;'
+            
+            'UPDATE artwork SET owner_id = user_subquery.id FROM (SELECT id FROM users WHERE address = '|| quote_literal(NEW.assets_address_5) ||') AS user_subquery
+            WHERE token_info ->> ''tokenId'' = ' || quote_literal(NEW.idx_assets_nat_4) ||
+            'AND token_info ->> ''contractAddress'' = ''KT1E...'' ;'
         );
     END IF;
 
@@ -31,7 +32,7 @@ CREATE OR REPLACE FUNCTION update_minter()
 RETURNS TRIGGER AS $$
 
 BEGIN
-    PERFORM dblink_connect('host=d-art-db dbname=postgres user=postgres password=p@ssw0rd port=5432');
+    PERFORM dblink_connect('host=<HOST> dbname=<DB_NAME> user=<USER> password=<PASSWORD> port=<PORT>'); 
 
     IF (TG_OP = 'INSERT' AND NOT NEW.deleted) THEN
         PERFORM dblink_exec(

@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION preconfigured_auctions()
 RETURNS trigger AS $$
 
 BEGIN
-    PERFORM dblink_connect('host=d-art-db dbname=postgres user=postgres password=p@ssw0rd port=5432'); 
+    PERFORM dblink_connect('host=<HOST> dbname=<DB_NAME> user=<USER> password=<PASSWORD> port=<PORT>'); 
 
     IF (TG_OP = 'INSERT' AND NOT NEW.deleted) THEN        
 
@@ -36,7 +36,7 @@ CREATE OR REPLACE FUNCTION auctions()
 RETURNS trigger AS $$
 
 BEGIN
-    PERFORM dblink_connect('host=d-art-db dbname=postgres user=postgres password=p@ssw0rd port=5432'); 
+    PERFORM dblink_connect('host=<HOST> dbname=<DB_NAME> user=<USER> password=<PASSWORD> port=<PORT>'); 
 
     IF (TG_OP = 'INSERT') THEN
 
